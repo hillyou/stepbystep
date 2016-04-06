@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:c="http://www.springframework.org/schema/c"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:jee="http://www.springframework.org/schema/jee"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+          http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
+          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+          http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang.xsd
+          http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+          http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+       ">
+    <!--    <bean id="sessionFactory" class="com.study.mybatis.util.DBSessionFactory">
+        <constructor-arg value="dev"></constructor-arg>
+    </bean>-->
+
+    <!--    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+        <property name="driverClassName" value="${dev.derby.driver}"/>
+        <property name="url" value="${dev.derby.url}"/>
+        <property name="removeAbandonedOnBorrow" value="true"/>
+        <property name="removeAbandonedOnMaintenance" value="true"/>
+        <property name="logAbandoned" value="true"/>
+    </bean>-->
+
+    <jee:jndi-lookup jndi-name="${datasource.jndi.name}" id="dataSource"></jee:jndi-lookup>
+
+    <!--    <jee:jndi-lookup jndi-name="java:comp/env/jdbc/JunitDerby" id="dataSourceForJunit"></jee:jndi-lookup>-->
+
+    <!--   transaction   -->
+    <!--    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>-->
+
+    <bean id="atomikosTransactionManager" class="com.atomikos.icatch.jta.UserTransactionManager" init-method="init" destroy-method="close">
+        <property name="forceShutdown" value="false" />
+    </bean>
+
+    <bean id="atomikosUserTransaction" class="com.atomikos.icatch.jta.J2eeUserTransaction">
+        <property name="transactionTimeout" value="300" />
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.transaction.jta.JtaTransactionManager" depends-on="atomikosTransactionManager,atomikosUserTransaction">
+        <property name="transactionManager" ref="atomikosTransactionManager"/>
+        <property name="userTransaction" ref="atomikosUserTransaction"/>
+        <property name="allowCustomIsolationLevels" value="true"/>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="${mybatis.config.file}"/>
+        <!--<property name="mapperLocations" value="classpath:com/study/mybatis/dao/*.xml"/>-->
+        <!--<property name="typeAliasesPackage" value="com.study.mybatis.model"/>-->
+    </bean>
+
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory" />
+        <constructor-arg index="1" value="BATCH" />
+    </bean>
+
+    <bean id="baseMapper" class="org.mybatis.spring.mapper.MapperFactoryBean" abstract="true" lazy-init="true">
+        <property name="sqlSessionTemplate" ref="sqlSession"/>
+    </bean>
+
+    <bean id="cityDAO" parent="baseMapper">
+        <property name="mapperInterface" value="com.study.mybatis.dao.CityDAO" />
+    </bean>
+
+    <bean id="accountDAO" parent="baseMapper">
+        <property name="mapperInterface" value="com.study.mybatis.dao.AccountDAO" />
+    </bean>
+
+    <!--    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.study.mybatis.dao" />
+    </bean>-->
+</beans>

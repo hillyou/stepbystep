@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+    <properties resource="mybatis.properties"/>
+    
+    <settings>
+        <setting name="cacheEnabled" value="false"></setting>
+        <!--<setting name="localCacheScope" value="STATEMENT"></setting>-->
+        <!--<setting name="logImpl" value="LOG4J"></setting>-->
+    </settings>
+    
+    <typeAliases>
+        <typeAlias alias="City" type="com.study.mybatis.model.City"></typeAlias>
+        <typeAlias alias="Account" type="com.study.mybatis.model.Account"></typeAlias>
+    </typeAliases>
+    
+    <typeHandlers>
+        <typeHandler javaType="com.study.mybatis.model.Account" jdbcType="VARCHAR" handler="com.study.mybatis.typehandler.AccountTypehandler"></typeHandler>
+    </typeHandlers>
+    
+    <environments default="dev">
+        <environment id="dev">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${dev.derby.driver}"/>
+                <property name="url" value="${dev.derby.url}"/>
+            </dataSource>
+        </environment>
+        <environment id="junit">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${junit.derby.driver}"/>
+                <property name="url" value="${junit.derby.url}"/>
+                <property name="poolMaximumActiveConnections" value="12" />
+                <property name="poolMaximumIdleConnections" value="5" />
+                <property name="poolMaximumCheckoutTime" value="5"/>
+                <property name="poolTimeToWait" value="5"/>
+            </dataSource>
+        </environment>
+    </environments>
+    
+    <mappers>
+        <mapper resource="com/study/mybatis/dao/CityDAO.xml"></mapper>
+        <mapper resource="com/study/mybatis/dao/AccountDAO.xml"></mapper>
+    </mappers>
+</configuration>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.study.mybatis.dao.CityDAO">
+<!--    <cache type="org.mybatis.caches.ehcache.EhcacheCache">-->
+        <!--        <property name="timeToIdleSeconds" value="3600"/>
+        <property name="timeToLiveSeconds" value="3600"/>
+        <property name="maxEntriesLocalHeap" value="1000"/>
+        <property name="maxEntriesLocalDisk" value="10000000"/>
+        <property name="memoryStoreEvictionPolicy" value="LRU"/>-->
+    <!--</cache>-->
+    <select id="getAll" resultType="City" useCache="true">
+        select CITY_ID cityId,CITY_NAME cityName,COUNTRY country,AIRPORT airport,LANGUAGE language,COUNTRY_ISO_CODE countryISOCode from Cities
+    </select>
+    
+    <select id="getById" resultType="City" parameterType="int" useCache="true">
+        select CITY_ID cityId,CITY_NAME cityName,COUNTRY country,AIRPORT airport,LANGUAGE language,COUNTRY_ISO_CODE countryISOCode from Cities where CITY_ID=#{id}
+    </select>
+    
+    <insert id="create" parameterType="City" useGeneratedKeys="false" keyProperty="cityId" keyColumn="CITY_ID">
+        insert into Cities (CITY_NAME,COUNTRY,AIRPORT,LANGUAGE,COUNTRY_ISO_CODE) values(
+        #{cityName,javaType=String,jdbcType=VARCHAR},
+        #{country,javaType=String,jdbcType=VARCHAR},
+        #{airport,javaType=String,jdbcType=VARCHAR},
+        #{language,javaType=String,jdbcType=VARCHAR},
+        'CN')
+        <selectKey resultType="int" keyProperty="cityId" order="AFTER"> 
+            values IDENTITY_VAL_LOCAL()
+        </selectKey>
+    </insert>
+    
+    <delete id="delete" parameterType="City" flushCache="true">
+        delete from APP.CITIES where city_id=#{cityId}
+    </delete>
+    
+    <update id="update" parameterType="City">
+        update APP.CITIES set 
+        CITY_NAME=#{cityName,javaType=String,jdbcType=VARCHAR},
+        COUNTRY=#{country,javaType=String,jdbcType=VARCHAR}, 
+        AIRPORT=#{airport,javaType=String,jdbcType=VARCHAR},
+        language=#{language,javaType=String,jdbcType=VARCHAR}
+        where city_id=#{cityId,javaType=int,jdbcType=INTEGER}
+    </update>
+    
+</mapper>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans file:///D:/lib/manual/spring/schema/beans/spring-beans-3.2.xsd
+          http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+          http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+">
+    <!-- Import CXF -->  
+    <import resource="classpath:META-INF/cxf/cxf.xml" />  
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml" /> 
+
+        
+    <!--    <util:properties id="server" location="server.properties"></util:properties>-->
+    <!-- Property place holder for properties file that hs -->
+    <!--    <bean id="propertyConfigurer"
+              class="org.jasypt.spring31.properties.EncryptablePropertyPlaceholderConfigurer">
+        <constructor-arg ref="configurationEncryptor" />
+        <property name="order" value="20" />
+        <property name="ignoreUnresolvablePlaceholders" value="true" />
+        <property name="locations">
+            <list>
+                <value>classpath:server.properties</value>
+            </list>
+        </property>
+    </bean>-->
+           
+    <bean id="cityService" class="com.study.webservice.impl.CityServiceImpl"/>
+    <bean id="accountService" class="com.study.webservice.impl.AccountServiceImpl"/>
+           
+    <jaxws:endpoint id="getCitiesWS" address="/ws" implementor="#cityService">
+    </jaxws:endpoint>
+    
+    <bean id="depthProperties" class="org.apache.cxf.staxutils.DocumentDepthProperties">
+        <property name="innerElementCountThreshold" value="500"/>
+    </bean> 
+ 
+    <bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider">
+        <property name="depthProperties" ref="depthProperties"/>
+    </bean> 
+ 
+    <bean id="jsonProvider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
+        <property name="depthProperties" ref="depthProperties"/>
+    </bean> 
+    
+    <bean id="jacksonJsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+    
+    <jaxrs:server id="getCitiesRS" address="/rs">
+        <jaxrs:serviceBeans >
+            <ref bean="cityService" />
+            <ref bean="accountService" />
+        </jaxrs:serviceBeans>
+        <jaxrs:extensionMappings>
+            <entry key="json" value="application/json" />
+            <entry key="xml" value="application/xml" />
+        </jaxrs:extensionMappings>
+        <jaxrs:providers>
+            <ref bean="jaxbProvider"/>
+            <ref bean="jacksonJsonProvider"/>
+            <ref bean="jsonProvider"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+    
+    
+</beans>

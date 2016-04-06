@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jms="http://www.springframework.org/schema/jms"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/jms http://www.springframework.org/schema/jms/spring-jms.xsd
+
+">
+    <!-- Wait 30 seconds first re-delivery, retry 3 times -->
+    <bean id="redeliveryPolicy" class="org.apache.activemq.RedeliveryPolicy">
+        <property name="initialRedeliveryDelay" value="30000" />
+        <property name="maximumRedeliveries" value="3" />
+        <property name="queue" value="*" />
+        <property name="redeliveryDelay" value="30000" />
+        <property name="useExponentialBackOff" value="false" />
+    </bean>
+
+    <!-- connection factory -->
+    <bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="${jms.server}" />
+        <property name="useAsyncSend" value="false" />
+        <property name="redeliveryPolicy" ref="redeliveryPolicy" />
+    </bean>
+
+    <!-- create transfer queue -->
+    <bean id="transferQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg index="0" value="${queue.transfer}"></constructor-arg>
+    </bean>
+
+    <!-- JMS container -->
+    <bean id="transferListenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="connectionFactory" />
+        <property name="destination" ref="transferQueue" />
+        <property name="messageListener" ref="transferMessageListener" />
+        <property name="exceptionListener" ref="jmsExceptionListener" />
+        <property name="concurrentConsumers" value="2" />
+        <property name="sessionTransacted" value="true" />
+        <property name="receiveTimeout" value="10000" />
+        <property name="transactionManager" ref="transactionManager" />
+    </bean>
+
+    <!-- create transfer sender -->
+    <bean id="transferSender" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="connectionFactory"></property>
+        <property name="defaultDestination" ref="transferQueue"></property>
+        <property name="explicitQosEnabled" value="true"></property>
+        <property name="deliveryPersistent" value="true"></property>
+    </bean>
+
+</beans>

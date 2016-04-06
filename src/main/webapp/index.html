@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="js/angular/angular.min.js" type="text/javascript"></script>
+    </head>
+    <body ng-app="home" ng-controller="homeCtrl">
+        <div>
+            <ul> 
+                <li>statuCode:{{statuCode}}</li>
+                <li>statuMessage:{{statuMessage}}</li>
+            </ul>
+        </div>
+        <div>
+            <table>
+                <tr ng-repeat="city in data.result">
+                    <td>{{city.cityId}}</td>
+                    <td>{{city.cityName}}</td>
+                    <td>{{city.country}}</td>
+                    <td>{{city.airport}}</td>
+                    <td>{{city.language}}</td>
+                    <td>{{city.countryISOCode}}</td>
+                </tr>
+            </table>
+        </div>
+        <script type="text/javascript">
+                    var app = angular.module('home', []);
+                    app.controller('homeCtrl', function ($scope, $http) {
+                        $http.get("http://127.0.0.1:7001/architect/services/rs/cities/all").then(function (response) {
+                            $scope.data = response.data;
+                            $scope.statuCode = response.status;
+                            $scope.statuMessage = response.statusText;
+                        }, function (response) {
+                            $scope.statuCode = response.status;
+                            $scope.statuMessage = response.statusText;
+                        });
+                    });
+        </script>
+    </body>
+</html>
+
