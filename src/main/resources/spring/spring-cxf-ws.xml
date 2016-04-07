@@ -4,14 +4,15 @@
        xmlns:jaxws="http://cxf.apache.org/jaxws"
        xmlns:jaxrs="http://cxf.apache.org/jaxrs"
 
-       xsi:schemaLocation="http://www.springframework.org/schema/beans file:///D:/lib/manual/spring/schema/beans/spring-beans-3.2.xsd
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
           http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
           http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
 ">
     <!-- Import CXF -->  
     <import resource="classpath:META-INF/cxf/cxf.xml" />  
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml" /> 
-
+    <!-- common beans for cxf web service -->
+    <import resource="classpath:spring/spring-cxf-common.xml" /> 
         
     <!--    <util:properties id="server" location="server.properties"></util:properties>-->
     <!-- Property place holder for properties file that hs -->
@@ -31,6 +32,12 @@
     <bean id="accountService" class="com.study.webservice.impl.AccountServiceImpl"/>
            
     <jaxws:endpoint id="getCitiesWS" address="/ws" implementor="#cityService">
+        <jaxws:inInterceptors>
+            <ref bean="loggingInInterceptor"/>
+        </jaxws:inInterceptors>
+        <jaxws:outInterceptors>
+            <ref bean="logOutInterceptor"/>
+        </jaxws:outInterceptors>
     </jaxws:endpoint>
     
     <bean id="depthProperties" class="org.apache.cxf.staxutils.DocumentDepthProperties">
@@ -61,6 +68,12 @@
             <ref bean="jacksonJsonProvider"/>
             <ref bean="jsonProvider"/>
         </jaxrs:providers>
+        <jaxrs:inInterceptors>
+            <ref bean="loggingInInterceptor"/>
+        </jaxrs:inInterceptors>
+        <jaxrs:outInterceptors>
+            <ref bean="logOutInterceptor"/>
+        </jaxrs:outInterceptors>
     </jaxrs:server>
     
     

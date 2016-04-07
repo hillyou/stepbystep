@@ -33,7 +33,7 @@ and open the template in the editor.
         <script type="text/javascript">
                     var app = angular.module('home', []);
                     app.controller('homeCtrl', function ($scope, $http) {
-                        $http.get("http://127.0.0.1:7001/architect/services/rs/cities/all").then(function (response) {
+                        $http.get("http://127.0.0.1:8080/architect/services/rs/cities/all").then(function (response) {
                             $scope.data = response.data;
                             $scope.statuCode = response.status;
                             $scope.statuMessage = response.statusText;

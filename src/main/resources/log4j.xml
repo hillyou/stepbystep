@@ -9,7 +9,7 @@
     </appender>
 
     <logger name="org.springframework">
-        <level value="debug" />
+        <level value="info" />
     </logger>
 
     <logger name="com.study">
@@ -17,7 +17,7 @@
     </logger>
 
     <logger name="org.apache.cxf">
-        <level value="debug" />
+        <level value="info" />
     </logger>
 
     <root>
