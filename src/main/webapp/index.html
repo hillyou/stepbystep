@@ -31,17 +31,17 @@ and open the template in the editor.
             </table>
         </div>
         <script type="text/javascript">
-                    var app = angular.module('home', []);
-                    app.controller('homeCtrl', function ($scope, $http) {
-                        $http.get("http://127.0.0.1:8080/architect/services/rs/cities/all").then(function (response) {
-                            $scope.data = response.data;
-                            $scope.statuCode = response.status;
-                            $scope.statuMessage = response.statusText;
-                        }, function (response) {
-                            $scope.statuCode = response.status;
-                            $scope.statuMessage = response.statusText;
-                        });
-                    });
+            var app = angular.module('home', []);
+            app.controller('homeCtrl', function ($scope, $http) {
+                $http.get("http://127.0.0.1:8080/architect/services/rs/cities/all").then(function (response) {
+                    $scope.data = response.data;
+                    $scope.statuCode = response.status;
+                    $scope.statuMessage = response.statusText;
+                }, function (response) {
+                    $scope.statuCode = response.status;
+                    $scope.statuMessage = response.statusText;
+                });
+            });
         </script>
     </body>
 </html>

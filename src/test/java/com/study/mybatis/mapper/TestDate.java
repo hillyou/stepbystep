@@ -19,6 +19,11 @@ public class TestDate {
         d.setTime(1444292315639L);
         SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         System.out.println(f.format(d));
+        
+        long time=658515247L;
+        long aa=  30661338L;
+        System.out.println(Math.round((float)aa/1000000));
+        System.out.println(Math.round((float)time/1000000));
     }
 
 }

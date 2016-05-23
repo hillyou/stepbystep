@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context antiJARLocking="false" path="/architect">
-    <Resource auth="Container" driverClassName="org.apache.derby.jdbc.ClientDriver" maxActive="4" maxIdle="4" name="jdbc/JunitDerby" type="javax.sql.DataSource" url="jdbc:derby://localhost:1527/testdb;create=false;"/>
+    <Resource auth="Container" driverClassName="org.apache.derby.jdbc.ClientDriver" maxTotal="8" maxIdle="4" name="jdbc/JunitDerby" type="javax.sql.DataSource" url="jdbc:derby://localhost:1527/testdb;create=false;"/>
 </Context>

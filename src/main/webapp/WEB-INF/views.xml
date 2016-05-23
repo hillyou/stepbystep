@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:util="http://www.springframework.org/schema/util"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+          http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+">
+    <bean id="parent-view" abstract="true"
+          class="org.springframework.web.servlet.view.JstlView">
+        <property name="attributes">
+            <props>
+                <prop key="title">FlightDeals.com</prop>
+                <prop key="season">Summer</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="homepage" parent="parent-view">
+        <property name="url" value="/WEB-INF/jsp/servicecheck.jsp"/>
+    </bean>
+    <!-- horrable!!!, it takes 20 times longer then above case -->
+    <bean id="viewGoDispatherAgain" parent="parent-view">
+        <property name="url" value="servicecheck.shtml"/>
+    </bean>
+    
+    <bean id="goredirect" class="org.springframework.web.servlet.view.RedirectView">
+        <property name="contextRelative" value="true"></property>
+        <property name="url" value="/features/themes/simple.shtml?theme=winter"></property>
+    </bean>
+</beans>

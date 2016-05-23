@@ -4,13 +4,11 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
 /* 
-    Created on : Oct 23, 2014, 1:23:03 PM
-    Author     : Colin.You
+    Created on : May 21, 2016, 10:55:03 AM
+    Author     : yougu
 */
 
 body{
-    background: green;
+    background: red;
 }
-h1,h2{
-    color: yellowgreen;
-}
+

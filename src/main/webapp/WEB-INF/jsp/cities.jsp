@@ -5,7 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@include file="../jspf/taglibs.jspf"%>
+<%@include file="/WEB-INF/jspf/taglibs.jspf"%>
 <!DOCTYPE html>
 <html>
     <head>

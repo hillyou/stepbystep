@@ -32,12 +32,84 @@
     <mvc:annotation-driven />
 
     <context:component-scan base-package="com.study.mybatis"/>
+    
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <property name="defaultLocale" value="zh_CN"></property>
+    </bean>
+    
+    <bean id="simpleUrlHandlerMapping"
+          class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+        <property name="order" value="100"></property>
+        <property name="mappings">
+            <props>
+                <prop key="/**">urlFilenameViewController</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="urlFilenameViewController" class="org.springframework.web.servlet.mvc.UrlFilenameViewController" />
+    
+    <bean id="beanNameUrlHandlerMapping"
+          class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping">
+        <property name="order" value="0"></property>
+    </bean>
+    
+    <bean id="requestMappingHandlerMapping"
+          class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+        <property name="order" value="1"></property>
+    </bean>
 
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <bean name="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="order" value="100"></property>
         <property name="prefix" value="/WEB-INF/jsp/"/>
         <property name="suffix" value=".jsp"/><!--可为空,方便实现自已的依据扩展名来选择视图解释类的逻辑  -->
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
     </bean>
+    
+    <bean id="resourceBundleViewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+        <property name="order" value="1"></property>
+        <property name="basename" value="view"/>
+    </bean>
+    
+    <bean name="xmlViewResolver" class="org.springframework.web.servlet.view.XmlViewResolver">
+        <property name="order" value="0"></property>
+    </bean>
+    
+    <bean id="themeSource"
+          class="org.springframework.ui.context.support.ResourceBundleThemeSource">
+        <property name="basenamePrefix" value="themes."/>
+    </bean>
+    
+    <bean id="themeResolver"
+          class="org.springframework.web.servlet.theme.CookieThemeResolver">
+        <property name="defaultThemeName" value="default"/>
+    </bean>
+    
+    <bean id="localeChangeInterceptor"
+          class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+    </bean>
+    
+    <bean id="themeChangeInterceptor"
+          class="org.springframework.web.servlet.theme.ThemeChangeInterceptor">
+    </bean>
+    
+<!--    <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+        <property name="definitions">
+            <list>
+                <value>/WEB-INF/defs/general.xml</value>
+            </list>
+        </property>
+    </bean>-->
+    
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"></mvc:mapping>
+            <ref bean="localeChangeInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"></mvc:mapping>
+            <ref bean="themeChangeInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 
     <!-- 拦截器 -->
     <!--    <mvc:interceptors>
