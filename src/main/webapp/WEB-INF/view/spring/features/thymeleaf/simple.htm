@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <link th:src="@{/css/base.css}" rel="stylesheet"/>
+        <head th:include="spring/features/thymeleaf/include/layout :: headerFragment">
+    </head>
+    <body>
+        <div th:include="spring/features/thymeleaf/include/layout :: menuFragment">
+        <div th:if="${not #lists.isEmpty(users)}">
+            <table>
+                <thead>username</thead>
+                <thead>password</thead>
+                <tbody>
+                    <tr th:each="user : ${users}">
+                        <td th:text="${user.firstName}">John</td>
+                        <td th:text="${user.lastName}">Smith</td>
+                    </tr>
+                    <tr th:each="user : ${users}">
+                        <td colspan="2">security</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>

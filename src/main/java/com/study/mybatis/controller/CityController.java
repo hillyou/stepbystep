@@ -8,7 +8,7 @@ package com.study.mybatis.controller;
 import com.study.mybatis.model.City;
 import com.study.mybatis.model.Response;
 import com.study.mybatis.service.CityServiceHandler;
-import java.util.List;
+import org.codehaus.jackson.map.annotate.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -35,6 +36,14 @@ public class CityController {
         Response response = cityServiceHandler.getAll();
         mv.addObject("cities", response.getResult());
         return mv;
+    }
+
+    @RequestMapping(value = "/all/jsonview/{id}", method = RequestMethod.GET)
+    @JsonView(City.class)
+    @ResponseBody
+    public City getCitiesJsonView(@PathVariable("id") int id) {
+        Response response = cityServiceHandler.getById(id);
+        return response.getResult() != null ? response.getResult().get(0) : null;
     }
 
     @RequestMapping(value = "/all/{id}", method = RequestMethod.GET)

@@ -7,10 +7,8 @@ package com.study.webservice;
 
 import com.study.mybatis.model.City;
 import com.study.mybatis.model.Response;
-import java.util.List;
 import javax.jws.WebService;
 import javax.ws.rs.BeanParam;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -52,7 +50,7 @@ public interface CityService {
     @Path("/all/{id}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public void delete(@PathParam("id") int cityId);
-    
+
     @Path("/test")
     @Produces({MediaType.APPLICATION_XML})
     public Person testResponse();

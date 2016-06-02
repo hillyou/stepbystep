@@ -1,11 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
 
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
 ">
-    
+
+    <bean id="depthProperties" class="org.apache.cxf.staxutils.DocumentDepthProperties">
+        <property name="innerElementCountThreshold" value="500"/>
+    </bean>
+
+    <bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider">
+        <property name="depthProperties" ref="depthProperties"/>
+    </bean>
+
+    <bean id="jsonProvider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
+        <property name="depthProperties" ref="depthProperties"/>
+    </bean>
+
+    <bean id="jacksonJsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+
+    <util:list id="wsMessageProviders">
+        <ref bean="jaxbProvider"/>
+        <ref bean="jacksonJsonProvider"/>
+        <ref bean="jsonProvider"/>
+    </util:list>
+
+
     <bean id="loggingInInterceptor" class="org.apache.cxf.interceptor.LoggingInInterceptor"/>
     <bean id="logOutInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor"/>
-    
+
+    <bean id="wSS4JInInterceptor" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+        <constructor-arg>
+            <map>
+                <!--key: org.apache.wss4j.dom.handler.WSHandlerConstants.ACTION-->
+                <!--value: org.apache.wss4j.common.WSS4JConstants.USERNAME_TOKEN_LN-->
+                <!--                <entry value="UsernameToken">
+                    <key>
+                        <util:constant static-field="org.apache.wss4j.dom.handler.WSHandlerConstants.ACTION"/>
+                    </key>
+                </entry>-->
+                <entry key="action" value="UsernameToken"/>
+                <entry key="passwordType" value="PasswordText"/>
+                <!--                <entry key="signaturePropFile" value="..."/>-->
+                <entry key="passwordCallbackRef">
+                    <ref bean="passwordCallback"/>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="passwordCallback" class="com.study.cxf.common.ServicePasswordCallback"></bean>
+
+    <bean id="cryptoCoverageChecker" class="org.apache.cxf.ws.security.wss4j.DefaultCryptoCoverageChecker"/>
+
 </beans>

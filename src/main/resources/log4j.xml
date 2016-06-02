@@ -9,7 +9,11 @@
     </appender>
 
     <logger name="org.springframework">
-        <level value="debug" />
+        <level value="trace" />
+    </logger>
+
+    <logger name="org.apache.tiles">
+        <level value="trace" />
     </logger>
 
     <logger name="com.study">

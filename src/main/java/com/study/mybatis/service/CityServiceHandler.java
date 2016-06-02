@@ -7,7 +7,6 @@ package com.study.mybatis.service;
 
 import com.study.mybatis.model.City;
 import com.study.mybatis.model.Response;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import org.apache.cxf.jaxrs.client.WebClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +45,7 @@ public class CityServiceHandler {
         webClient.path("/rs/cities/update").put(city);
     }
 
-    public void delete(@PathParam("id") int id) {
+    public void delete(int id) {
         webClient.reset();
         webClient.path("/rs/cities/all/" + id).delete();
     }

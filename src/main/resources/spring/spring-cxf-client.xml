@@ -12,50 +12,45 @@
 ">
 
     <!-- Import CXF -->
-<!--    <import resource="classpath:META-INF/cxf/cxf.xml" />
+    <!--    <import resource="classpath:META-INF/cxf/cxf.xml" />
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />-->
 
-    <bean id="depthProperties" class="org.apache.cxf.staxutils.DocumentDepthProperties">
-        <property name="innerElementCountThreshold" value="500"/>
-    </bean>
+    <!-- common beans for cxf web service -->
+    <import resource="classpath:spring/spring-cxf-common.xml" />
 
-    <bean id="jaxbProvider" class="org.apache.cxf.jaxrs.provider.JAXBElementProvider">
-        <property name="depthProperties" ref="depthProperties"/>
-    </bean>
 
-    <bean id="jsonProvider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider">
-        <property name="depthProperties" ref="depthProperties"/>
+    <bean id="clientFactoryWS" class="org.apache.cxf.jaxws.JaxWsClientFactoryBean">
+        <property name="serviceClass" value="com.study.webservice.CityService"/>
+        <property name="address" value="${webservice.address}/ws"/>
     </bean>
-
-    <bean id="jacksonJsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
 
     <bean id="cityClientWS" class="com.study.webservice.CityService" factory-bean="clientFactoryWS" factory-method="create"/>
 
-    <bean id="clientFactoryWS" class="org.apache.cxf.jaxws.JaxWsProxyFactoryBean">
-        <property name="serviceClass" value="com.study.webservice.CityService"/>
-        <property name="address" value="${webservice.address}/ws/cities/all"/>
-    </bean>
+    <jaxws:client id="cityClientWS1"
+                  serviceClass="com.study.webservice.CityService"
+                  address="${webservice.address}/ws" >
+    </jaxws:client>
 
-    <util:list id="webClientProviders">
-        <ref bean="jaxbProvider"/>
-        <ref bean="jacksonJsonProvider"/>
-        <ref bean="jsonProvider"/>
-    </util:list>
 
-    <bean id="webClient" class="org.apache.cxf.jaxrs.client.WebClient" factory-method="create">
+    <!--done-->
+    <bean id="webClientRS" class="org.apache.cxf.jaxrs.client.WebClient" factory-method="create">
         <constructor-arg type="java.lang.String" value="${webservice.address}" />
-        <constructor-arg ref="webClientProviders"/>
+        <constructor-arg ref="wsMessageProviders"/>
     </bean>
 
-    <jaxrs:client id="cityClientRS" address="${webservice.address}" serviceClass="com.study.webservice.CityService">
+    <bean id="clientFactoryRS" class="org.apache.cxf.jaxrs.client.JAXRSClientFactoryBean">
+        <property name="serviceClass" value="com.study.webservice.CityService"/>
+        <property name="address" value="${webservice.address}/ws"/>
+    </bean>
+
+    <bean id="cityClientWS" class="com.study.webservice.CityService" factory-bean="clientFactoryWS" factory-method="create"/>
+
+
+    <jaxrs:client id="cityClientRS" address="${webservice.address}/rs" serviceClass="com.study.webservice.CityService">
         <jaxrs:headers>
             <entry key="Accept" value="application/json"></entry>
         </jaxrs:headers>
     </jaxrs:client>
 
-    <jaxws:client id="cityClientWS1"
-                  serviceClass="com.study.webservice.CityService"
-                  address="${webservice.address}/rs/cities/all" >
-    </jaxws:client>
 
 </beans>
