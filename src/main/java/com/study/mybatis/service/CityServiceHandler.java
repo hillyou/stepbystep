@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @author Colin.You
  */
 @Service
-public class CityServiceHandler {
+public class CityServiceHandler implements Handler {
 
     @Autowired(required = false)
     private WebClient webClient;

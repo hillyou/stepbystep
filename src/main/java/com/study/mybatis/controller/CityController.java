@@ -7,7 +7,7 @@ package com.study.mybatis.controller;
 
 import com.study.mybatis.model.City;
 import com.study.mybatis.model.Response;
-import com.study.mybatis.service.CityServiceHandler;
+import com.study.mybatis.service.Handler;
 import org.codehaus.jackson.map.annotate.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,7 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class CityController {
 
     @Autowired
-    private CityServiceHandler cityServiceHandler;
+    private Handler cityServiceHandler;
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public ModelAndView getCities() {

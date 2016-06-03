@@ -31,6 +31,27 @@
     <bean id="loggingInInterceptor" class="org.apache.cxf.interceptor.LoggingInInterceptor"/>
     <bean id="logOutInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor"/>
 
+    <bean id="wSS4JOutInterceptor" class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+        <constructor-arg>
+            <map>
+                <!--key: org.apache.wss4j.dom.handler.WSHandlerConstants.ACTION-->
+                <!--value: org.apache.wss4j.common.WSS4JConstants.USERNAME_TOKEN_LN-->
+                <!--                <entry value="UsernameToken">
+                    <key>
+                        <util:constant static-field="org.apache.wss4j.dom.handler.WSHandlerConstants.ACTION"/>
+                    </key>
+                </entry>-->
+                <entry key="action" value="UsernameToken"/>
+                <entry key="passwordType" value="PasswordText"/>
+                <entry key="user" value="test"/>
+                <!--                <entry key="signaturePropFile" value="..."/>-->
+                <entry key="passwordCallbackRef">
+                    <ref bean="passwordCallback"/>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+
     <bean id="wSS4JInInterceptor" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
         <constructor-arg>
             <map>
