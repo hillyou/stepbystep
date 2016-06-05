@@ -35,7 +35,7 @@
         <jaxws:inInterceptors>
             <ref bean="loggingInInterceptor"/>
             <ref bean="wSS4JInInterceptor"/>
-            <!--            <ref bean="cryptoCoverageChecker"/>-->
+            <!--<ref bean="cryptoCoverageChecker"/>-->
         </jaxws:inInterceptors>
         <jaxws:outInterceptors>
             <ref bean="logOutInterceptor"/>

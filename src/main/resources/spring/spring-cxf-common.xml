@@ -41,7 +41,7 @@
                         <util:constant static-field="org.apache.wss4j.dom.handler.WSHandlerConstants.ACTION"/>
                     </key>
                 </entry>-->
-                <entry key="action" value="UsernameToken"/>
+                <entry key="action" value="Timestamp UsernameToken"/>
                 <entry key="passwordType" value="PasswordText"/>
                 <entry key="user" value="test"/>
                 <!--                <entry key="signaturePropFile" value="..."/>-->
@@ -62,7 +62,7 @@
                         <util:constant static-field="org.apache.wss4j.dom.handler.WSHandlerConstants.ACTION"/>
                     </key>
                 </entry>-->
-                <entry key="action" value="UsernameToken"/>
+                <entry key="action" value="Timestamp UsernameToken"/>
                 <entry key="passwordType" value="PasswordText"/>
                 <!--                <entry key="signaturePropFile" value="..."/>-->
                 <entry key="passwordCallbackRef">

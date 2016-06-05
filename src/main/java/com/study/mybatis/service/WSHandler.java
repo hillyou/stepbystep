@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 @Primary
 public class WSHandler implements Handler {
 
+//    @Resource(name = "cityClientRSName")
     @Resource(name = "cityClientWS1Name")
     private CityService cityService;
 

@@ -64,9 +64,9 @@
 
     <!-- view resolver begin -->
     <bean id="templateResolver" class="org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver">
-        <property name="prefix" value="/WEB-INF/view/" />
-        <property name="suffix" value=".htm" />
-        <property name="templateMode" value="HTML5" />
+        <property name="prefix" value="/WEB-INF/view/spring/features/" />
+        <property name="suffix" value=".html" />
+        <property name="templateMode" value="HTML" />
         <property name="cacheable" value="false" />
     </bean>
     <bean id="templateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine">
@@ -75,7 +75,7 @@
     <bean class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
         <property name="templateEngine" ref="templateEngine" />
         <property name="order" value="60" />
-        <property name="viewNames" value="spring/features/thymeleaf/*" />
+        <property name="viewNames" value="thymeleaf/*" />
     </bean>
 
     <bean name="xmlViewResolver" class="org.springframework.web.servlet.view.XmlViewResolver">

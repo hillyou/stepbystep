@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "response")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Response implements Serializable {
-
+    private static final long serialVersionUID = 7996615407130538903L;
     private String message;
     private boolean hasError = false;
     @XmlElementWrapper

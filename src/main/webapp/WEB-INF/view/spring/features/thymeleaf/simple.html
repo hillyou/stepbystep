@@ -4,13 +4,13 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head>
         <link th:src="@{/css/base.css}" rel="stylesheet"/>
-        <head th:include="spring/features/thymeleaf/include/layout :: headerFragment">
+        <head th:include="thymeleaf/include/layout :: headerFragment">
     </head>
     <body>
-        <div th:include="spring/features/thymeleaf/include/layout :: menuFragment">
+        <div th:include="thymeleaf/include/layout :: menuFragment">
         <div th:if="${not #lists.isEmpty(users)}">
             <table>
                 <thead>username</thead>

@@ -26,9 +26,14 @@
 
     <bean id="cityClientWS" class="com.study.webservice.CityService" factory-bean="clientFactoryWS" factory-method="create"/>
 
+    <!--done-->
     <jaxws:client id="cityClientWS1" name="cityClientWS1Name"
                   serviceClass="com.study.webservice.CityService"
                   address="${webservice.address}/ws" >
+        <jaxws:inInterceptors>
+            <ref bean="loggingInInterceptor"/>
+            <!--<ref bean="cryptoCoverageChecker"/>-->
+        </jaxws:inInterceptors>
         <jaxws:outInterceptors>
             <ref bean="wSS4JOutInterceptor"/>
             <ref bean="logOutInterceptor"/>
@@ -50,11 +55,18 @@
     <bean id="cityClientRSFac" class="com.study.webservice.CityService" factory-bean="clientFactoryRS" factory-method="create"/>
 
 
-    <jaxrs:client id="cityClientRS" address="${webservice.address}/rs" serviceClass="com.study.webservice.CityService">
+    <jaxrs:client id="cityClientRS" name="cityClientRSName" address="${webservice.address}/rs" serviceClass="com.study.webservice.CityService">
         <jaxrs:headers>
+            <!--            <entry key="Accept" value="application/xml"></entry>-->
             <entry key="Accept" value="application/json"></entry>
         </jaxrs:headers>
+        <jaxrs:outInterceptors>
+            <ref bean="logOutInterceptor"/>
+        </jaxrs:outInterceptors>
+        <jaxrs:providers>
+            <ref bean="jacksonJsonProvider"/>
+            <ref bean="jsonProvider"/>
+        </jaxrs:providers>
     </jaxrs:client>
-
 
 </beans>

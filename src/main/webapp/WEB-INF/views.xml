@@ -25,11 +25,11 @@
     </bean>
     <!-- horrable!!!, it takes 20 times longer then above case -->
     <bean id="viewGoDispatherAgain" parent="parent-view">
-        <property name="url" value="servicecheck.shtml"/>
+        <property name="url" value="servicecheck.xhtml"/>
     </bean>
     
     <bean id="goredirect" class="org.springframework.web.servlet.view.RedirectView">
         <property name="contextRelative" value="true"></property>
-        <property name="url" value="/features/themes/simple.shtml?theme=winter"></property>
+        <property name="url" value="/features/themes/simple.xhtml?theme=winter"></property>
     </bean>
 </beans>

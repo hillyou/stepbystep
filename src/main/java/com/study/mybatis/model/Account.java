@@ -21,6 +21,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "Account")
 public class Account implements Serializable {
 
+    private static final long serialVersionUID = 7677246925935518538L;
+
     @FormParam("accountId")
     private int account_id;
     @FormParam("money")

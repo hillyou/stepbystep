@@ -51,6 +51,7 @@ public interface CityService {
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     public void delete(@PathParam("id") int cityId);
 
+    @GET
     @Path("/test")
     @Produces({MediaType.APPLICATION_XML})
     public Person testResponse();
