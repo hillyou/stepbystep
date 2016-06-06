@@ -5,6 +5,7 @@
  */
 package com.study.webservice;
 
+import com.study.cxf.common.ServiceException;
 import com.study.mybatis.model.City;
 import com.study.mybatis.model.Response;
 import javax.jws.WebService;
@@ -29,7 +30,7 @@ public interface CityService {
     @GET
     @Path("/all")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Response getCities();
+    public Response getCities() throws ServiceException;
 
     @GET
     @Path("/all/{id}")

@@ -5,6 +5,7 @@
  */
 package com.study.mybatis.service;
 
+import com.study.cxf.common.ServiceException;
 import com.study.mybatis.model.City;
 import com.study.mybatis.model.Response;
 import com.study.webservice.CityService;
@@ -26,7 +27,11 @@ public class WSHandler implements Handler {
 
     @Override
     public Response getAll() {
-        return cityService.getCities();
+        try {
+            return cityService.getCities();
+        } catch (ServiceException ex) {
+            throw new RuntimeException("Call service error",ex);
+        }
     }
 
     @Override

@@ -5,6 +5,7 @@
  */
 package com.study.webservice.impl;
 
+import com.study.cxf.common.ServiceException;
 import com.study.mybatis.mapper.CityMapper;
 import com.study.mybatis.model.City;
 import com.study.mybatis.model.Response;
@@ -26,11 +27,15 @@ public class CityServiceImpl implements CityService {
     private CityMapper cityMapper;
 
     @Override
-    public Response getCities() {
+    public Response getCities() throws ServiceException {
+        try{
         Response response = new Response();
         List<City> cities = cityMapper.getAll();
         response.setResult(cities);
         return response;
+        }catch(Exception e){
+            throw new ServiceException("service error",null,e);
+        }
     }
 
     @Override
