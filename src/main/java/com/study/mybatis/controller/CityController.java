@@ -50,7 +50,7 @@ public class CityController {
     public ModelAndView getCity(@PathVariable("id") int id) {
         ModelAndView mv = new ModelAndView("cities");
         Response response = cityServiceHandler.getById(id);
-        mv.addObject("city", response.getResult());
+        mv.addObject("cities", response.getResult());
         mv.addObject("response", response);
         return mv;
     }

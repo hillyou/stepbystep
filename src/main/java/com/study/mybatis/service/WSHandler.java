@@ -30,13 +30,17 @@ public class WSHandler implements Handler {
         try {
             return cityService.getCities();
         } catch (ServiceException ex) {
-            throw new RuntimeException("Call service error",ex);
+            throw new RuntimeException("service error", ex);
         }
     }
 
     @Override
     public Response getById(int id) {
-        return cityService.getCity(id);
+        try {
+            return cityService.getCity(id);
+        } catch (Exception ex) {
+            throw new RuntimeException("service error", ex);
+        }
     }
 
     @Override

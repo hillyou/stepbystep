@@ -31,49 +31,19 @@
     <bean id="loggingInInterceptor" class="org.apache.cxf.interceptor.LoggingInInterceptor"/>
     <bean id="logOutInterceptor" class="org.apache.cxf.interceptor.LoggingOutInterceptor"/>
 
-    <bean id="wSS4JOutInterceptor" class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
-        <constructor-arg>
-            <map>
-                <!--key: org.apache.wss4j.dom.handler.WSHandlerConstants.ACTION-->
-                <!--value: org.apache.wss4j.common.WSS4JConstants.USERNAME_TOKEN_LN-->
-                <!--                <entry value="UsernameToken">
-                    <key>
-                        <util:constant static-field="org.apache.wss4j.dom.handler.WSHandlerConstants.ACTION"/>
-                    </key>
-                </entry>-->
-                <entry key="action" value="Timestamp UsernameToken"/>
-                <entry key="passwordType" value="PasswordText"/>
-                <entry key="user" value="test"/>
-                <!--                <entry key="signaturePropFile" value="..."/>-->
-                <entry key="passwordCallbackRef">
-                    <ref bean="passwordCallback"/>
-                </entry>
-            </map>
-        </constructor-arg>
-    </bean>
-
-    <bean id="wSS4JInInterceptor" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
-        <constructor-arg>
-            <map>
-                <!--key: org.apache.wss4j.dom.handler.WSHandlerConstants.ACTION-->
-                <!--value: org.apache.wss4j.common.WSS4JConstants.USERNAME_TOKEN_LN-->
-                <!--                <entry value="UsernameToken">
-                    <key>
-                        <util:constant static-field="org.apache.wss4j.dom.handler.WSHandlerConstants.ACTION"/>
-                    </key>
-                </entry>-->
-                <entry key="action" value="Timestamp UsernameToken"/>
-                <entry key="passwordType" value="PasswordText"/>
-                <!--                <entry key="signaturePropFile" value="..."/>-->
-                <entry key="passwordCallbackRef">
-                    <ref bean="passwordCallback"/>
-                </entry>
-            </map>
-        </constructor-arg>
-    </bean>
-
-    <bean id="passwordCallback" class="com.study.cxf.common.ServicePasswordCallback"></bean>
+    <bean id="soap12FaultInInterceptor" class="org.apache.cxf.binding.soap.interceptor.Soap12FaultInInterceptor"></bean>
+    <bean id="soap12FaultOutInterceptor" class="org.apache.cxf.binding.soap.interceptor.Soap12FaultOutInterceptor"></bean>
 
     <bean id="cryptoCoverageChecker" class="org.apache.cxf.ws.security.wss4j.DefaultCryptoCoverageChecker"/>
+
+    <bean id="headerInterceptor" class="com.study.cxf.common.HeaderInterceptor"></bean>
+
+    <bean id="cxf" class="org.apache.cxf.bus.spring.SpringBus">
+        <property name="outInterceptors">
+            <list>
+                <ref bean="headerInterceptor"/>
+            </list>
+        </property>
+    </bean>
 
 </beans>

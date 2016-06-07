@@ -12,6 +12,12 @@
 ">
     <bean id="messageSource"
           class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-        <property name="basename" value="classpath:messages/view"/>
+        <property name="basenames">
+            <list>
+                <value>classpath:messages/view</value>
+                <!--for web serice server i18n messages-->
+                <value>classpath:com/study/webservice/impl/message</value>
+            </list>
+        </property>
     </bean>
 </beans>

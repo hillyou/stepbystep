@@ -11,23 +11,22 @@ import javax.xml.ws.WebFault;
  *
  * @author yougu
  */
-@WebFault(name = "CustumFault", faultBean = "com.study.cxf.common.FaultBean")
+@WebFault(name = "fault", faultBean = "com.study.cxf.common.FaultBean")
 public class ServiceException extends Exception {
 
     private static final long serialVersionUID = -980672610145187140L;
     private FaultBean faultBean;
 
-     public ServiceException() {
+    public ServiceException() {
         super();
     }
-    
-    public ServiceException(String message, FaultBean faultInfo) {
+
+    public ServiceException(String message) {
         super(message);
-        this.faultBean = faultInfo;
     }
 
-    public ServiceException(String message, FaultBean faultInfo, Throwable cause) {
-        super(message, cause);
+    public ServiceException(String message, FaultBean faultInfo) {
+        this(message);
         this.faultBean = faultInfo;
     }
 

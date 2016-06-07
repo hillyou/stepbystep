@@ -3,11 +3,12 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:jaxws="http://cxf.apache.org/jaxws"
        xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xmlns:soap="http://cxf.apache.org/bindings/soap"
 
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
           http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
           http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
-">
+    ">
     <!-- Import CXF -->
     <import resource="classpath:META-INF/cxf/cxf.xml" />
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
@@ -34,12 +35,17 @@
     <jaxws:endpoint id="getCitiesWS" address="/ws" implementor="#cityService">
         <jaxws:inInterceptors>
             <ref bean="loggingInInterceptor"/>
-            <ref bean="wSS4JInInterceptor"/>
+            <ref bean="wSS4JInInterceptor4Server"/>
             <!--<ref bean="cryptoCoverageChecker"/>-->
         </jaxws:inInterceptors>
         <jaxws:outInterceptors>
+            <!--<ref bean="wSS4JOutInterceptor4Server"/>-->
             <ref bean="logOutInterceptor"/>
         </jaxws:outInterceptors>
+        <jaxws:outFaultInterceptors>
+            <ref bean="soap12FaultOutInterceptor"/>
+            <ref bean="logOutInterceptor"/>
+        </jaxws:outFaultInterceptors>
     </jaxws:endpoint>
 
     <jaxrs:server id="getCitiesRS" address="/rs">
@@ -64,27 +70,46 @@
         </jaxrs:outInterceptors>
     </jaxrs:server>
 
-    <jaxrs:server id="citiesRS" address="/copyrs">
-        <jaxrs:serviceBeans >
-            <ref bean="cityService" />
-            <ref bean="accountService" />
-        </jaxrs:serviceBeans>
-        <jaxrs:extensionMappings>
-            <entry key="json" value="application/json" />
-            <entry key="xml" value="application/xml" />
-        </jaxrs:extensionMappings>
-        <jaxrs:providers>
-            <ref bean="jaxbProvider"/>
-            <ref bean="jacksonJsonProvider"/>
-            <ref bean="jsonProvider"/>
-        </jaxrs:providers>
-        <jaxrs:inInterceptors>
-            <ref bean="loggingInInterceptor"/>
-        </jaxrs:inInterceptors>
-        <jaxrs:outInterceptors>
-            <ref bean="logOutInterceptor"/>
-        </jaxrs:outInterceptors>
-    </jaxrs:server>
 
+    <bean id="passwordCallback4Server" class="com.study.cxf.common.ServerPasswordCallback"></bean>
+    <bean id="wSS4JInInterceptor4Server" class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+        <constructor-arg>
+            <map>
+                <!--key: org.apache.wss4j.dom.handler.WSHandlerConstants.ACTION-->
+                <!--value: org.apache.wss4j.common.WSS4JConstants.USERNAME_TOKEN_LN-->
+                <!--                <entry value="UsernameToken">
+                    <key>
+                        <util:constant static-field="org.apache.wss4j.dom.handler.WSHandlerConstants.ACTION"/>
+                    </key>
+                </entry>-->
+                <entry key="action" value="UsernameToken"/>
+                <!--<entry key="passwordType" value="PasswordText"/>-->
+                <!--                <entry key="action" value="Timestamp Signature Encrypt"/>
+                <entry key="signaturePropFile" value="certs/server/server-crypto.properties"/>
+                <entry key="decryptionPropFile" value="certs/server/server-crypto.properties"/>-->
+                <entry key="passwordCallbackRef">
+                    <ref bean="passwordCallback4Server"/>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
 
+    <!-- WSS4JOutInterceptor for signing and encrypting outbound SOAP -->
+    <bean id="wSS4JOutInterceptor4Server" class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+        <constructor-arg>
+            <map>
+                <entry key="action" value="Timestamp Signature Encrypt"/>
+                <entry key="user" value="server"/>
+                <entry key="signaturePropFile" value="certs/server/server-crypto.properties"/>
+                <entry key="encryptionPropFile" value="certs/server/server-crypto.properties"/>
+                <entry key="encryptionUser" value="useReqSigCert"/>
+                <entry key="signatureParts" value="{Element}{http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd}Timestamp;{Element}{http://schemas.xmlsoap.org/soap/envelope/}Body"/>
+                <entry key="encryptionParts" value="{Content}{http://schemas.xmlsoap.org/soap/envelope/}Body"/>
+                <entry key="encryptionSymAlgorithm" value="http://www.w3.org/2001/04/xmlenc#tripledes-cbc"/>
+                <entry key="passwordCallbackRef">
+                    <ref bean="passwordCallback4Server"/>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
 </beans>
